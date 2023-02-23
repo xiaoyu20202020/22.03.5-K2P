@@ -18,4 +18,3 @@
 #echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 git clone https://github.com/myd2898129/luci-app-ddns-go.git package/ddns-go
 git clone https://github.com/myd2898129/openwrt-packages package/kiddin9-packages
-git clone https://github.com/sirpdboy/luci-app-netdata package/luci-app-netdata
