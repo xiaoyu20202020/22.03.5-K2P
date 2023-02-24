@@ -20,7 +20,7 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/myd2898129/openwrt-23.03.3
+  REPO_URL: https://github.com/myd2898129/openwrt-22.03.3
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
