@@ -19,5 +19,7 @@ sed -i 's/2.openwrt.pool.ntp.org/time.ustc.edu.cn/g' package/base-files/files/bi
 sed -i 's/3.openwrt.pool.ntp.org/cn.pool.ntp.org/g' package/base-files/files/bin/config_generate
 sed -i 's/set wireless.${name}.disabled=1/set wireless.default_${name}.country=us/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 sed -i 's/set wireless.default_${name}.ssid=OpenWrt/set wireless.default_${name}.ssid=MY_5G/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+sed -i 's/set wireless.default_${name}.encryption=none/set wireless.default_${name}.encryption=psk2/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+sed '/set wireless.default_${name}.encryption=none/a \set wireless.default_${name}.key=18606323535 package/kernel/mac80211/files/lib/wifi/mac80211.sh
 # sed -i "/CYXluq4wUazHjmCDBCqXF/d" package/lean/default-settings/files/zzz-default-settings
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
