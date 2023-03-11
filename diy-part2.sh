@@ -12,12 +12,10 @@
 
 # Modify default IP
 sed -i 's/192.168.1.1/192.168.6.1/g' package/base-files/files/bin/config_generate
-sed -i 's/set system.ntp.enable_server='0'/set system.ntp.enable_server='1'/g' package/base-files/files/bin/config_generate
+sed -i 's/UTC/Asia/Shanghai/g' package/base-files/files/bin/config_generate
 sed -i 's/0.openwrt.pool.ntp.org/ntp.aliyun.com/g' package/base-files/files/bin/config_generate
 sed -i 's/1.openwrt.pool.ntp.org/time1.cloud.tencent.com/g' package/base-files/files/bin/config_generate
 sed -i 's/2.openwrt.pool.ntp.org/time.ustc.edu.cn/g' package/base-files/files/bin/config_generate
 sed -i 's/3.openwrt.pool.ntp.org/cn.pool.ntp.org/g' package/base-files/files/bin/config_generate
-sed -i 's/set wireless.${name}.disabled=1/set wireless.default_${name}.country=us/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
-sed -i 's/set wireless.default_${name}.ssid=OpenWrt/set wireless.default_${name}.ssid=MY_5G/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 # sed -i "/CYXluq4wUazHjmCDBCqXF/d" package/lean/default-settings/files/zzz-default-settings
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
