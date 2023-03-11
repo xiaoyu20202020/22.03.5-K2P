@@ -20,6 +20,6 @@ sed -i 's/3.openwrt.pool.ntp.org/cn.pool.ntp.org/g' package/base-files/files/bin
 sed -i 's/set wireless.${name}.disabled=1/set wireless.${name}.disabled=0/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 sed -i 's/set wireless.default_${name}.ssid=OpenWrt/set wireless.default_${name}.ssid=MY_5G/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 sed -i 's/set wireless.default_radio${devidx}.encryption=none/set wireless.default_radio${devidx}.encryption=psk2/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
-sed '184 a\set wireless.default_radio${devidx}.key=18606323535 package/kernel/mac80211/files/lib/wifi/mac80211.sh
+sed '/set wireless.default_radio${devidx}.encryption=psk2/a \set wireless.default_radio${devidx}.key=18606323535 package/kernel/mac80211/files/lib/wifi/mac80211.sh
 # sed -i "/CYXluq4wUazHjmCDBCqXF/d" package/lean/default-settings/files/zzz-default-settings
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
