@@ -38,7 +38,7 @@ jobs:
   
     name: Build K2P Firmware 22.03.3（无DDNS-GO)
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout
