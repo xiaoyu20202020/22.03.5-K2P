@@ -39,5 +39,5 @@ sed -i '$a uci set wireless.radio0.disabled='0' package/base-files/files/bin/con
 sed -i '$a uci set system.@system[0].zonename='Asia/Shanghai' package/base-files/files/bin/config_generate
 sed -i '$a uci set system.@system[0].timezone='GMT-8' package/base-files/files/bin/config_generate
 sed -i '$a uci set upnpd.config.enabled='1' package/base-files/files/bin/config_generate
-#sed -i '$a uci set ttyd.@ttyd[0].command='/bin/login -f root' package/base-files/files/bin/config_generate
+sed -i '$a uci set ttyd.@ttyd[0].command='/bin/login -f root' package/base-files/files/bin/config_generate
 sed -i '$a uci commit' package/base-files/files/bin/config_generate
