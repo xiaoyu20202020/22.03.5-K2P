@@ -17,4 +17,4 @@
 git clone https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
 git clone https://github.com/jerrykuku/luci-app-argon-config.git package/luci-app-argon-config
 git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
-git clone https://github.com/kiddin9/openwrt-packages/tree/master/luci-app-zerotier package/luci-app-zerotier
+git clone https://github.com/myd2898129/openwrt-packages package/luci-app-zerotier
