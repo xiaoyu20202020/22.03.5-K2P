@@ -38,7 +38,7 @@ jobs:
   
     name: Build K2P Firmware 23.05.0
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
