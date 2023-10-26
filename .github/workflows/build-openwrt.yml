@@ -65,6 +65,15 @@ jobs:
         cd openwrt
         git tag
         git checkout v23.05.0
+
+    - name: Compile firmware # 这是新增的步骤
+      run: |
+        cd openwrt
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        make menuconfig # 或者使用其他方式来配置固件选项
+        make -j$(nproc) # 编译固件
+        
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
