@@ -66,14 +66,6 @@ jobs:
         git tag
         git checkout v23.05.0
 
-    - name: Compile firmware
-      run: |
-        cd openwrt
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
-        make menuconfig # or use other ways to configure firmware options
-        make -j$(nproc) # compile firmware
-
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
