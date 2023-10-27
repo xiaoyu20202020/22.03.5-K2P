@@ -85,12 +85,7 @@ jobs:
 
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
-
-    - name: Remove circular dependency
-      run: |
-        cd openwrt/feeds/packages/lang/python/pymysql
-        sed -i '/+PACKAGE_python3-pymysql:python3-pymysql-sha-password-support/d' Makefile
-
+      
     - name: Load custom configuration
       run: |
         [ -e files ] && mv files openwrt/files
