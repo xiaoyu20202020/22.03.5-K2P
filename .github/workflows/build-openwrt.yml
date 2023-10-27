@@ -35,7 +35,7 @@ env:
 
 jobs:
   build:
-  
+
     name: Build K2P Firmware 23.05.0
 
     runs-on: ubuntu-latest
@@ -66,13 +66,13 @@ jobs:
         git tag
         git checkout v23.05.0
 
-    - name: Compile firmware # 这是新增的步骤
+    - name: Compile firmware
       run: |
         cd openwrt
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        make menuconfig # 或者使用其他方式来配置固件选项
-        make -j$(nproc) # 编译固件
+        make menuconfig # or use other ways to configure firmware options
+        make -j$(nproc) # compile firmware
 
     - name: Load custom feeds
       run: |
@@ -95,7 +95,7 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P2_SH
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh != 'false') || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -151,48 +151,45 @@ jobs:
         curl -fsSL git.io/file-transfer | sh
         ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
         echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
-        echo "url=$(cat cowtransfer.log | grep https | cut -f3 -d' ')" >> $GITHUB_ENV
-        
-- name: Upload firmware to WeTransfer
-  id: wetransfer
-  if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
-  run: |
-    curl -fsSL git.io/file-transfer | sh
-    ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-    echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
-    echo "url=$(cat wetransfer.log | grep https | cut -f3 -d' ')" >> $GITHUB_ENV
+        echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
+    - name: Upload firmware to WeTransfer
+      id: wetransfer
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
+        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+        echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
+    - name: Generate release tag
+      id: tag
+      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      run: |
+        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
+        touch release.txt
+        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
+        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
+        echo "::set-output name=status::success"
+    - name: Upload firmware to release
+      uses: softprops/action-gh-release@v1
+      if: steps.tag.outputs.status == 'success' && !cancelled()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag.outputs.release_tag }}
+        body_path: release.txt
+        files: ${{ env.FIRMWARE }}/*
 
-- name: Generate release tag
-  id: tag
-  if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-  run: |
-    echo "release_tag=$(date +'%Y.%m.%d-%H%M')" >> $GITHUB_ENV
-    touch release.txt
-    [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 Cowtransfer" >> release.txt
-    [ $UPLOAD_WETRANSFER = true ] && echo "🔗 WeTransfer" >> release.txt
-    echo "status=success" >> $GITHUB_ENV
+    - name: Delete workflow runs
+      uses: GitRML/delete-workflow-runs@main
+      with:
+        retain_days: 1
+        keep_minimum_runs: 3
 
-- name: Upload firmware to release
-  uses: softprops/action-gh-release@v1
-  if: steps.tag.outputs.status == 'success' && !cancelled()
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  with:
-    tag_name: ${{ steps.tag.outputs.release_tag }}
-    body_path: release.txt
-    files: ${{ env.FIRMWARE }}/*
-
-- name: Delete workflow runs
-  uses: GitRML/delete-workflow-runs@main
-  with:
-    retain_days: 1
-    keep_minimum_runs: 3
-
-- name: Remove old Releases
-  uses: dev-drprasad/delete-older-releases@v0.1.0
-  if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-  with:
-    keep_latest: 3
-    delete_tags: true
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Remove old Releases
+      uses: dev-drprasad/delete-older-releases@v0.1.0
+      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      with:
+        keep_latest: 3
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
