@@ -44,11 +44,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3 #2023年9月发布，支持最新Node.js16
 
-    - name: Set up Node.js 16 #新增步骤，升级为Node.js16
-      uses: actions/setup-node@v2
-      with:
-        node-version: 16
-
     - name: Initialization environment
       env:
         DEBIAN_FRONTEND: noninteractive
